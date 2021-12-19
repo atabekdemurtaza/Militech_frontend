@@ -1,41 +1,43 @@
 import logo from './logo.svg';
 import './App.css';
 import React, {Component} from 'react';
-
-const list = [
-                {
-                  "id": 1,
-                  "title": "1st post",
-                  "body": "Learn Django properly."
-                }, 
-                {
-                  "id": 2,
-                  "title": "Learn HTTP",
-                  "body": "It's important"
-                },
-                {
-                  "id": 3,
-                  "title": "Third item",
-                  "body": "Learn Python"
-                }
-]
+import axios from 'axios';
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {list};
+  state = {
+    post: []
+  };
+
+
+  //new 
+  componentDidMount() {
+    this.getPost();
   }
+
+  //new 
+  getPost() {
+    axios
+      .get('http://127.0.0.1:8000/api/')
+      .then(res=> {
+        this.setState({post: res.data});
+      })
+      .catch(err=> {
+        console.log('Error');
+      });
+  }
+
   render() {
     return(
       <div>
-        {this.state.list.map(item=>(
+        {this.state.post.map(item=> (
           <div key={item.id}>
             <h1>{item.title}</h1>
-            <p>{item.body}</p>
+            <span>{item.body}</span>
           </div>
         ))}
       </div>
     );
   }
 }
+
 export default App;
